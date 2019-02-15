@@ -13,8 +13,6 @@ public class PlayerScoreBoardManager {
 
 	private Player currentTopPlayer;
 
-	private boolean isGameOver;
-
 	private PlayerScoreBorad playerScoreBorad;
 
 	public PlayerScoreBoardManager(PlayerScoreBorad playerScoreBorad) {
@@ -47,11 +45,4 @@ public class PlayerScoreBoardManager {
 		return currentTopPlayer;
 	}
 
-	public boolean isGameOver() {
-		return isGameOver;
-	}
-
-	public void setGameOver(boolean isGameOver) {
-		this.isGameOver = isGameOver;
-	}
 }

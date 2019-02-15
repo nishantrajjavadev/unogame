@@ -19,10 +19,10 @@ public class UnoGameController {
 
 	// Can be taken as input (hard coded the input)
 	static {
-		playersOfTheGame.put("Nishant", 7);
-		playersOfTheGame.put("Arpan", 8);
-		playersOfTheGame.put("Shivranjani", 9);
-		playersOfTheGame.put("Sahil", 10);
+		playersOfTheGame.put("PLAYER_1", 7);
+		playersOfTheGame.put("PLAYER_2", 8);
+		playersOfTheGame.put("PLAYER_3", 9);
+		playersOfTheGame.put("PLAYER_4", 10);
 	}
 
 	public static void main(String[] args) {
