@@ -26,11 +26,11 @@ public class UnoGameExecutor implements Game {
 
 	private AtomicInteger maxNoOfGameRounds = new AtomicInteger(1);
 
-	private PlayerManager playerManager;
+	private final PlayerManager playerManager;
 
 	private int maxScorePointToWin;
 
-	private CardManager cardManager;
+	private final CardManager cardManager;
 
 	/**
 	 * Initialize players,cardDeck and player score board with default values
