@@ -30,7 +30,7 @@ public class PlayerSimpleTrick implements Trick {
 		if (myFilterCards.size() > 0) {
 			return getMaxNumberCard(myFilterCards);
 		} else {
-			List<Card> specialCards = getSpecialCardList(myCards, discardPileCard);
+			List<Card> specialCards = getActionCardList(myCards, discardPileCard);
 			if (specialCards.size() > 0) {
 				return specialCards.get(0);
 			}

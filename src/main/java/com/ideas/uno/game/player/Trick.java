@@ -13,7 +13,7 @@ public interface Trick {
 		return cards.stream().max(Comparator.comparing(Card::getNumber)).get();
 	}
 
-	public default List<Card> getSpecialCardList(List<Card> cards, Card matchingCard) {
+	public default List<Card> getActionCardList(List<Card> cards, Card matchingCard) {
 		return cards.stream().filter(specialCard -> specialCard.getCardColors().equals(matchingCard.getCardColors())).collect(Collectors.toList());
 	}
 }
