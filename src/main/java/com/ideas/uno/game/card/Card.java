@@ -1,5 +1,6 @@
 package com.ideas.uno.game.card;
 
+
 public class Card {
 
 	private CardColor cardColors;
@@ -28,6 +29,8 @@ public class Card {
 
 	@Override
 	public String toString() {
-		return "Card [cardColors=" + cardColors + ", cardType=" + cardType + ", number=" + number + "]";
+		return "Card [cardColors=" + cardColors + ", cardType=" + cardType
+				+ ", number=" + number + "]";
 	}
+
 }

@@ -11,4 +11,8 @@ public class GameManager {
 	public void play() {
 		this.game.play();
 	}
+	
+	public void loadGame() {
+		this.game.loadGame();
+	}
 }

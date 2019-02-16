@@ -15,8 +15,8 @@ public class NextReverseDirectionPlayer extends DirectionManager {
 	@Override
 	public Player getNextPlayer() {
 		List<Player> players = this.playerManager.getGamePlayers();
-		Collections.reverse(this.playerManager.getGamePlayers());
-		int index = getPlayerCurrentPostion();
+		Collections.reverse(players);
+		int index = getPlayerCurrentPostion(players);
 		if (index == (players.size() - 1)) {
 			return players.get(0);
 		} else {

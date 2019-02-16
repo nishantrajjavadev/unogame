@@ -5,8 +5,10 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ideas.uno.game.card.CardDeck;
 import com.ideas.uno.game.card.CardManager;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
@@ -19,11 +21,17 @@ public class Draw2CardUnoPlayTest {
 	private PlayerManager playerManager;
 	private CardManager cardManager;
 	private Draw2CardUnoPlay draw2CardUnoPlay;
+	private static CardDeck cardDeck;
+
+	@BeforeClass
+	public static void beforeClass() {
+		cardDeck = CardDeck.getInstance();
+	}
 	
 	@Before
 	public void setUp(){
 		loadPlayers();
-		cardManager = new CardManager();
+		cardManager = new CardManager(cardDeck);
 		playerManager = new PlayerManager(playersOfTheGame);
 		draw2CardUnoPlay = new Draw2CardUnoPlay(playerManager, cardManager);
 	}

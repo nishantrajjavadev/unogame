@@ -1,10 +1,8 @@
 package com.ideas.uno.game.player;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.ideas.uno.game.card.Card;
-import com.ideas.uno.game.card.CardType;
 
 /*
  * PlayerSimpleTrick play cards based on the Number cards
@@ -24,18 +22,19 @@ public class PlayerSimpleTrick implements Trick {
 
 	@Override
 	public Card myTrick() {
-		List<Card> myFilterCards = myCards.stream().filter(myCard -> myCard.getCardColors().equals(discardPileCard.getCardColors()) && CardType.NUMBER.equals(myCard.getCardType()))
-				.collect(Collectors.toList());
-
-		if (myFilterCards.size() > 0) {
-			return getMaxNumberCard(myFilterCards);
-		} else {
-			List<Card> specialCards = getActionCardList(myCards, discardPileCard);
-			if (specialCards.size() > 0) {
-				return specialCards.get(0);
-			}
+		List<Card> myMatchingColorCards = getNumberCardsWithSameColor(this.myCards, this.discardPileCard);
+		if (myMatchingColorCards.size() > 0) {
+			return getMaxNumberCard(myMatchingColorCards);
+		} 
+		List<Card> myMatchingNumberCards = getAnyNumberCardsWithSameColor(this.myCards, this.discardPileCard);
+		if(myMatchingNumberCards.size() > 0) {
+			return myMatchingNumberCards.get(0);
+		} 
+		List<Card> specialCards = getActionCardList(this.myCards, this.discardPileCard);
+		if(specialCards.size() > 0) {
+			return specialCards.get(0);
 		}
-		List<Card> myWildCards = myCards.stream().filter(wildCard -> CardType.WILD.equals(wildCard.getCardType()) || CardType.WILD_D4.equals(wildCard.getCardType())).collect(Collectors.toList());
+		List<Card> myWildCards = getAnyWildCard(this.myCards);
 		if (myWildCards.size() > 0) {
 			return myWildCards.get(0);
 		}

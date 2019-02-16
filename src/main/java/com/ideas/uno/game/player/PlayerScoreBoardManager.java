@@ -13,6 +13,7 @@ public class PlayerScoreBoardManager {
 
 	private Player currentTopPlayer;
 
+
 	private PlayerScoreBorad playerScoreBorad;
 
 	public PlayerScoreBoardManager(PlayerScoreBorad playerScoreBorad) {

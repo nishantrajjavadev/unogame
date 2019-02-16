@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.ideas.uno.game.card.Card;
+import com.ideas.uno.game.card.CardDeck;
 import com.ideas.uno.game.card.CardFactory;
 import com.ideas.uno.game.card.CardManager;
 import com.ideas.uno.game.card.CardType;
@@ -22,16 +23,18 @@ import com.ideas.uno.game.rules.Rule;
  */
 public class UnoGameExecutor implements Game {
 
-	private PlayerScoreBoardManager scoreManager;
+	private PlayerScoreBoardManager scoreBoardManager;
 
 	private AtomicInteger maxNoOfGameRounds = new AtomicInteger(1);
 
-	private final PlayerManager playerManager;
+	private PlayerManager playerManager;
 
 	private int maxScorePointToWin;
 
-	private final CardManager cardManager;
-
+	private CardManager cardManager;
+	
+	private Map<String, Integer> playersOfTheGame;
+	
 	/**
 	 * Initialize players,cardDeck and player score board with default values
 	 * @param playersOfTheGame
@@ -39,16 +42,17 @@ public class UnoGameExecutor implements Game {
 	 */
 	public UnoGameExecutor(final Map<String, Integer> playersOfTheGame, final int maxScorePointToWin) {
 		this.maxScorePointToWin = maxScorePointToWin;
-		this.playerManager = new PlayerManager(playersOfTheGame);
-		this.cardManager = new CardManager();
-		this.scoreManager = new PlayerScoreBoardManager(new PlayerScoreBorad(this.playerManager.getGamePlayers(), this.maxScorePointToWin));
-		loadGame(this.cardManager);
+		this.playersOfTheGame = playersOfTheGame;
 	}
 
 	/**
 	 * load the games (Loads the cards and distribute cards to the players)
 	 */
-	private void loadGame(CardManager cardManager) {
+	@Override
+	public void loadGame() {
+		playerManager = new PlayerManager(playersOfTheGame);
+		this.cardManager = new CardManager(CardDeck.getInstance());
+		this.scoreBoardManager = new PlayerScoreBoardManager(new PlayerScoreBorad(this.playerManager.getGamePlayers(), this.maxScorePointToWin));
 		this.playerManager.distrubuteCards(cardManager);
 	}
 
@@ -58,25 +62,28 @@ public class UnoGameExecutor implements Game {
 	 */
 	@Override
 	public void play() {
+		CardDeck cardDeck = this.cardManager.getCardDeck();
 		Player firstPlayer = this.playerManager.getFirstPlayer();
-		Card currentCard = cardManager.getCardDeck().getFirstCard();
-		cardManager.getCardDeck().addCardToDiscardPile(currentCard);
-		Turn currentTurn = CardType.NUMBER.equals(currentCard.getCardType()) ? new Turn(firstPlayer, currentCard) : this.playerManager.getPlayerIfNotNumberCard(currentCard, firstPlayer, cardManager);
+		Card currentCard = cardDeck.getFirstCard();
+		cardDeck.addCardToDiscardPile(currentCard);
+		Turn currentTurn = getFirstDrawPileCard(firstPlayer, currentCard);
 		while (true) {
+			if (currentTurn == null || currentTurn.getPlayingCard() == null) {
+				System.out.println("-----Round-------" + maxNoOfGameRounds);
+				maxNoOfGameRounds.incrementAndGet();
+				this.scoreBoardManager.calculateScore();
+				break;
+			}
 			Player currentPlayer = currentTurn.getCurrentPlayer();
 			Card playingCard = currentTurn.getPlayingCard();
 			// break game in case of no card left to one player
-			if (playingCard == null) {
-				System.out.println("-----Round-------" + maxNoOfGameRounds);
-				maxNoOfGameRounds.incrementAndGet();
-				break;
-			}
-			Rule unoPlay = new CardFactory().getPlayingCard(playingCard, playerManager, cardManager);
+			
+			Rule unoPlay = new CardFactory().getPlayingCard(playingCard, this.playerManager, this.cardManager);
 			currentTurn = unoPlay.play(playingCard, currentPlayer);
 		}
 
-		scoreManager.calculateScore();
-		if (scoreManager.isGameFinished()) {
+		if (this.scoreBoardManager.isGameFinished()) {
+			System.out.println("-----Maximum score point to win-------" + maxScorePointToWin);
 			printLog();
 			return;
 		}
@@ -89,6 +96,16 @@ public class UnoGameExecutor implements Game {
 	}
 
 	/**
+	 * @param firstPlayer
+	 * @param currentCard
+	 * @return
+	 */
+	private Turn getFirstDrawPileCard(Player firstPlayer, Card currentCard) {
+		Turn currentTurn = CardType.NUMBER.equals(currentCard.getCardType()) ? new Turn(firstPlayer, currentCard) : this.playerManager.getPlayerIfNotNumberCard(currentCard, firstPlayer, cardManager);
+		return currentTurn;
+	}
+
+	/**
 	 * Print logs for players score
 	 * can make it better to using logging
 	 * 
@@ -98,17 +115,17 @@ public class UnoGameExecutor implements Game {
 			System.out.println("----- Each Player score-------");
 			System.out.println(" Player, Score : " + logPlayer.getName() + ", " + logPlayer.getScore());
 		});
-		System.out.println(" Top score Player : " + scoreManager.getCurrentTopPlayer().getName() + " Player Point : " + scoreManager.getCurrentTopPlayer().getScore());
+		Player player = scoreBoardManager.getCurrentTopPlayer();
+		System.out.println(" Top score Player : " + player.getName() + " Player Point : " + player.getScore());
 	}
 
 	/**
 	 * reset the complete game when new game round starts
 	 * 
 	 */
-	private void resetGameState() {
+	public void resetGameState() {
 		playerManager.resetCards();
 		cardManager.resetCardDeck();
-		loadGame(cardManager);
+		this.playerManager.distrubuteCards(cardManager);
 	}
-
 }

@@ -6,40 +6,32 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ideas.uno.game.card.Card;
 import com.ideas.uno.game.card.CardManager;
 import com.ideas.uno.game.card.CardType;
-import com.ideas.uno.game.executor.Turn;
-import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
-import com.ideas.uno.game.player.direction.NextDirectionPlayer;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class NormalCardUnoPlayTest {
 
 	private Map<String, Integer> playersOfTheGame;
 	private PlayerManager playerManager;
-	private CardManager cardManager;
 	private NormalCardUnoPlay normalCardUnoPlay;
+	CardManager cardManager;
 	
 	@Before
 	public void setUp(){
 		loadPlayers();
-		cardManager = new CardManager();
-		playerManager = new PlayerManager(playersOfTheGame);
+		playerManager = Mockito.mock(PlayerManager.class);
+		cardManager = Mockito.mock(CardManager.class);
 		normalCardUnoPlay = new NormalCardUnoPlay(playerManager, cardManager);
+		
 	}
 	
-	
-	@Test
-	public void shouldReturnNextPlayer() {
-		playerManager.distrubuteCards(cardManager);
-		Player player = playerManager.getGamePlayers().get(0);
-		Turn turn = normalCardUnoPlay.play(playerManager.getGamePlayers().get(0).getCards().get(0), playerManager.getGamePlayers().get(0));
-		Player nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
-		Assert.assertTrue(turn.getCurrentPlayer().equals(nextPlayer));
-	}
 	
 	@Test
 	public void shouldReturnTrueWildCardPlayer() {

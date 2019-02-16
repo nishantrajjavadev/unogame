@@ -15,7 +15,7 @@ public class Player {
 
 	final private String name;
 
-	private List<Card> myCards;
+	private final List<Card> myCards;
 
 	private int score;
 
@@ -37,12 +37,12 @@ public class Player {
 		return score;
 	}
 
-	public void addCard(Card card) {
+	public void addCard(final Card card) {
 		this.myCards.add(card);
 		System.out.println(this.name + " Picked the card from draw pile : " + card);
 	}
 
-	public void removeCards(Card card) {
+	public void removeCards(final Card card) {
 		System.out.println(this.name + " Played " + card);
 		this.myCards.remove(card);
 		if (myCards.size() == 1) {
@@ -54,8 +54,11 @@ public class Player {
 		return Collections.unmodifiableList(this.myCards);
 	}
 
-	public Card turn(Card discardPileCard, CardManager cardManager) {
+	public Card turn(final Card discardPileCard, final CardManager cardManager) {
 		Card myChance = null;
+		if(discardPileCard == null){
+			return null;
+		}
 		myChance = new PlayerSimpleTrick(myCards, discardPileCard).myTrick();
 		if (myChance != null) {
 			sendHandCardToDiscardPileCard(cardManager.getCardDeck(), myChance);
@@ -81,7 +84,7 @@ public class Player {
 	/**
 	 * @param cardDeck
 	 */
-	public void draw2CardPenalty(CardManager cardManager) {
+	public void draw2CardPenalty(final CardManager cardManager) {
 		for (int i = 0; i < 2; i++) {
 			addCard(cardManager.getCardDeck().getDrawPile().pop());
 		}
@@ -90,7 +93,7 @@ public class Player {
 	/**
 	 * @param cardDeck
 	 */
-	public void wild4CardPenalty(CardManager cardManager) {
+	public void wild4CardPenalty(final CardManager cardManager) {
 		for (int i = 0; i < 4; i++) {
 			addCard(cardManager.getCardDeck().getDrawPile().pop());
 		}
@@ -101,10 +104,13 @@ public class Player {
 		cardDeck.addCardToDiscardPile(myChance);
 	}
 
-	public Card getNextTrickyCard(CardManager cardManager) {
+	public Card getNextTrickyCard(final CardManager cardManager) {
 		Card myTrickyCard = new PlayerWildCardTrick(myCards).myTrick();
 		if (myTrickyCard != null) {
 			sendHandCardToDiscardPileCard(cardManager.getCardDeck(), myTrickyCard);
+			if (this.myCards.size() == 0) {
+				return null;
+			}
 		}
 		return myTrickyCard;
 	}
@@ -117,4 +123,12 @@ public class Player {
 		this.myCards.clear();
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Player [age=" + age + ", name=" + name + ", myCards=" + myCards
+				+ ", score=" + score + "]";
+	}
+	
+	
 }

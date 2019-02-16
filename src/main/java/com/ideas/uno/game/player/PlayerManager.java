@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+import org.apache.commons.collections4.MapUtils;
+
+
 import com.ideas.uno.game.card.Card;
 import com.ideas.uno.game.card.CardManager;
 import com.ideas.uno.game.card.CardType;
@@ -23,7 +27,15 @@ public class PlayerManager {
 
 	public PlayerManager(final Map<String, Integer> playersOfTheGame) {
 		// Initialize players of the game
-		this.players = playersOfTheGame.entrySet().stream().map(m -> new Player(m.getKey(), m.getValue())).collect(Collectors.toList());
+		if(MapUtils.isEmpty(playersOfTheGame) || playersOfTheGame.size() < 2 || playersOfTheGame.size() > 10){
+			throw new IllegalArgumentException("Players details not correct");
+		}
+		this.players = playersOfTheGame.entrySet().stream().map(m -> {
+			if(m.getValue() < 7){
+				throw new IllegalArgumentException(m.getKey() + " , You are to too small to play this game ");
+			}
+			return new Player(m.getKey(), m.getValue());
+		}).collect(Collectors.toList());
 	}
 
 	public List<Player> getGamePlayers() {

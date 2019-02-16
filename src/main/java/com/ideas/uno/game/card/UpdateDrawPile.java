@@ -13,7 +13,6 @@ public class UpdateDrawPile implements DrawPileObserver {
 	private Stack<Card> discardPile;
 
 	public UpdateDrawPile(Stack<Card> drawPile, Stack<Card> discardPile) {
-		super();
 		this.drawPile = drawPile;
 		this.discardPile = discardPile;
 	}

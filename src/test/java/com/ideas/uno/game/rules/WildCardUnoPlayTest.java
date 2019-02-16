@@ -3,17 +3,17 @@ package com.ideas.uno.game.rules;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.ideas.uno.game.card.Card;
+import com.ideas.uno.game.card.CardDeck;
 import com.ideas.uno.game.card.CardManager;
 import com.ideas.uno.game.card.CardType;
-import com.ideas.uno.game.executor.Turn;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
-import com.ideas.uno.game.player.direction.NextDirectionPlayer;
 
 
 public class WildCardUnoPlayTest {
@@ -22,24 +22,28 @@ public class WildCardUnoPlayTest {
 	private PlayerManager playerManager;
 	private CardManager cardManager;
 	private WildCardUnoPlay wildCardUnoPlay;
+	private Player player;
+	private static CardDeck cardDeck;
 	
+	@BeforeClass
+	public static void beforeClass() {
+		cardDeck = CardDeck.getInstance();
+	}
 	@Before
 	public void setUp(){
 		loadPlayers();
-		cardManager = new CardManager();
+		cardManager = new CardManager(cardDeck);
 		playerManager = new PlayerManager(playersOfTheGame);
-		wildCardUnoPlay = new WildCardUnoPlay(playerManager, cardManager);
+		player = Mockito.mock(Player.class);
 	}
 	
 	@Test
 	public void shouldReturnFirstPlayer() {
-		playerManager.distrubuteCards(cardManager);
-		Player player = playerManager.getGamePlayers().get(0);
-		Card currentCard = cardManager.getCardDeck().getDrawPile().stream().filter(card -> card.getCardType().equals(CardType.NUMBER)).findFirst().get();
-		Turn turn = wildCardUnoPlay.play(currentCard, playerManager.getGamePlayers().get(0));
-		Player nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
-		nextPlayer = new NextDirectionPlayer(nextPlayer, this.playerManager).getNextPlayer();
-		Assert.assertTrue(nextPlayer.getName().equals(turn.getCurrentPlayer().getName()));
+		Card card= new Card(null, CardType.NUMBER, 10);
+		Mockito.when(player.getNextTrickyCard(cardManager)).thenReturn(card);
+		wildCardUnoPlay = new WildCardUnoPlay(playerManager, cardManager);
+		wildCardUnoPlay.play(card, player);
+		Mockito.verify(player).getNextTrickyCard(cardManager);
 	}
 	
 	private Map<String, Integer> loadPlayers() {

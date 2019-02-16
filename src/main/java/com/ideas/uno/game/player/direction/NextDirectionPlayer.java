@@ -14,7 +14,7 @@ public class NextDirectionPlayer extends DirectionManager {
 	@Override
 	public Player getNextPlayer() {
 		List<Player> players = this.playerManager.getGamePlayers();
-		int index = getPlayerCurrentPostion();
+		int index = getPlayerCurrentPostion(players);
 		if (index == (players.size() - 1)) {
 			return players.get(0);
 		} else {

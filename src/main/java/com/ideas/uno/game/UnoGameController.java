@@ -28,10 +28,13 @@ public class UnoGameController {
 	public static void main(String[] args) {
 		try {
 			Game gameUno = new UnoGameExecutor(playersOfTheGame, maxScorePointToWin);
-			new GameManager(gameUno).play();
+			GameManager gameManager = new GameManager(gameUno);
+			gameManager.loadGame();
+			gameManager.play();
 			System.out.println("------------GAME OVER------------");
 		} catch (Exception ex) {
-			System.out.println("---------Error in Game Play---------" + ex.getMessage());
+			ex.printStackTrace();
+			System.out.println("---------Error in Game Play---------" + ex);
 		}
 	}
 

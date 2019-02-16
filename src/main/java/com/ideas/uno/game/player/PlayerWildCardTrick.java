@@ -16,7 +16,13 @@ public class PlayerWildCardTrick implements Trick {
 
 	@Override
 	public Card myTrick() {
-		return myCards.stream().collect(Collectors.maxBy(Comparator.comparing(Card::getCardColors))).orElse(myCards.stream().findAny().get());
+		return myCards
+				.stream()
+				.collect(
+						Collectors.maxBy(Comparator
+								.comparing(Card::getCardColors)))
+				.orElse(myCards.size() > 0 ? myCards.stream().findAny().get()
+						: null);
 	}
 
 }

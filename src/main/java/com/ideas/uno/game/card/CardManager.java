@@ -6,10 +6,10 @@ public class CardManager {
 
 	private final CardDeck cardDeck;
 
-	public CardManager() {
-		this.cardDeck = new CardDeck();
+	public CardManager(CardDeck cardDeck) {
+		this.cardDeck = cardDeck;
 	}
-
+	
 	public CardDeck getCardDeck() {
 		return cardDeck;
 	}

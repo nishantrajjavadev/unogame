@@ -6,15 +6,15 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ideas.uno.game.card.Card;
 import com.ideas.uno.game.card.CardColor;
 import com.ideas.uno.game.card.CardType;
-import com.ideas.uno.game.player.Player;
-import com.ideas.uno.game.player.PlayerScoreBoardManager;
-import com.ideas.uno.game.player.PlayerScoreBorad;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PlayerScoreBoardManagerTest {
 
 	PlayerScoreBorad playerScoreBoard;

@@ -29,6 +29,9 @@ public class WildCardUnoPlay implements Rule {
 	@Override
 	public Turn play(final Card myCurrentCard, final Player player) {
 		Card playerChanceCard = player.getNextTrickyCard(this.cardManager);
+		if(playerChanceCard == null){
+			return new Turn(player, null);
+		}
 		Player nextPlayer = null;
 		if (CardType.WILD_D4.equals(playerChanceCard.getCardType())) {
 			nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
