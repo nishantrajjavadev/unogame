@@ -23,6 +23,8 @@ public class PlayerManagerTest {
 	private static CardDeck cardDeck;
 	CardManager cardManager;
 
+	private PlayerTrickManageFactory trickManagerFactory;
+	
 	@BeforeClass
 	public static void beforeClass(){
 		cardDeck = CardDeck.getInstance();
@@ -30,9 +32,10 @@ public class PlayerManagerTest {
 	
 	@Before
 	public void setUp() {
+		trickManagerFactory = new PlayerTrickManagerFactoryImpl();
 		cardManager = new CardManagerImpl(cardDeck);
 		loadPlayers();
-		playerManager = new PlayerManagerImpl(playersOfTheGame);
+		playerManager = new PlayerManagerImpl(playersOfTheGame, trickManagerFactory);
 		playerManager.loadPlayer();
 	}
 

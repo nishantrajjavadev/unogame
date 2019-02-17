@@ -36,12 +36,4 @@ public class CardDeckTest {
 		Assert.assertTrue(cardDeck.getDiscardPile().size() == 0);
 	}
 
-	@Test
-	public void shouldShuffleIfFirstCardIsWildCard() {
-		cardDeck.getDrawPile().pop();
-		cardDeck.getDiscardPile().push(new Card(null, CardType.WILD, 50));
-		Card card = cardDeck.getFirstCard();
-		Assert.assertFalse((CardType.WILD.equals(card.getCardType())
-				|| CardType.WILD_D4.equals(card.getCardType())));
-	}
 }

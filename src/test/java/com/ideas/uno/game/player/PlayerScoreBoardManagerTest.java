@@ -20,9 +20,11 @@ public class PlayerScoreBoardManagerTest {
 	PlayerScoreBorad playerScoreBoard;
 	Player currentTopPlayer;
 	PlayerScoreBoardManager boardManager;
+	private PlayerTrickManageFactory trickManagerFactory;
 
 	@Before
 	public void setUp() {
+		trickManagerFactory = new PlayerTrickManagerFactoryImpl();
 		playerScoreBoard = Mockito.mock(PlayerScoreBorad.class);
 		boardManager = new PlayerScoreBoardManager(playerScoreBoard);
 	}
@@ -72,10 +74,10 @@ public class PlayerScoreBoardManagerTest {
 	}
 
 	private List<Player> populatePlayers() {
-		Player playerOne = new Player("Nishant", 25);
+		Player playerOne = new Player("PLAYER_1", 25, trickManagerFactory);
 		playerOne.addScore(100);
 
-		Player playerTwo = new Player("Shivranjani", 20);
+		Player playerTwo = new Player("PLAYER_2", 20, trickManagerFactory);
 		playerTwo.addCard(new Card(CardColor.GREEN, CardType.NUMBER, 9));
 		playerTwo.addScore(500);
 
@@ -86,11 +88,11 @@ public class PlayerScoreBoardManagerTest {
 	}
 
 	private List<Player> populatePlayersWithoutHighestScore() {
-		Player playerOne = new Player("Nishant", 25);
+		Player playerOne = new Player("PLAYER_1", 25, trickManagerFactory);
 		playerOne.addCard(new Card(CardColor.RED, CardType.WILD, 2));
 		playerOne.addScore(100);
 
-		Player playerTwo = new Player("Shivranjani", 20);
+		Player playerTwo = new Player("PLAYER_1", 20, trickManagerFactory);
 		playerTwo.addCard(new Card(CardColor.GREEN, CardType.NUMBER, 9));
 		playerTwo.addScore(200);
 

@@ -18,11 +18,13 @@ public class PlayerTest {
 
 	CardManager cardManager;
 	private CardDeck cardDeck;
+	private PlayerTrickManageFactory trickManagerFactory;
 
 	@Before
 	public void setUp() {
+		trickManagerFactory = new PlayerTrickManagerFactoryImpl();
 		cardManager = Mockito.mock(CardManagerImpl.class);
-		player = new Player("Nishant", 25);
+		player = new Player("Nishant", 25, trickManagerFactory);
 		cardDeck = CardDeck.getInstance();
 	}
 

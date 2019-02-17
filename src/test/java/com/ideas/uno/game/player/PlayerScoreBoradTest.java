@@ -14,10 +14,12 @@ import com.ideas.uno.game.player.PlayerScoreBorad;
 
 public class PlayerScoreBoradTest {
 
-	PlayerScoreBorad playerScoreBorad;
+	private PlayerScoreBorad playerScoreBorad;
+	private PlayerTrickManageFactory trickManagerFactory;
 
 	@Test
 	public void shouldReturnListOfPlayers() {
+		trickManagerFactory = new PlayerTrickManagerFactoryImpl();
 		List<Player> players = populatePlayers();
 		playerScoreBorad = new PlayerScoreBorad(players, 500);
 		List<Player> actualList = playerScoreBorad.getPlayers();
@@ -49,10 +51,10 @@ public class PlayerScoreBoradTest {
 	}
 
 	private List<Player> populatePlayers() {
-		Player playerOne = new Player("Nishant", 25);
+		Player playerOne = new Player("Nishant", 25, trickManagerFactory);
 		playerOne.addScore(100);
 
-		Player playerTwo = new Player("Shivranjani", 20);
+		Player playerTwo = new Player("Shivranjani", 20, trickManagerFactory);
 		playerTwo.addCard(new Card(CardColor.GREEN, CardType.NUMBER, 9));
 		playerTwo.addScore(500);
 

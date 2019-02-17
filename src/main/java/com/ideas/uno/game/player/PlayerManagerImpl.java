@@ -21,8 +21,11 @@ public class PlayerManagerImpl implements PlayerManager{
 
 	private final Map<String, Integer> playersOfTheGame;
 	
-	public PlayerManagerImpl(final Map<String, Integer> playersOfTheGame) {
+	private final PlayerTrickManageFactory trickManageFactory;
+	
+	public PlayerManagerImpl(final Map<String, Integer> playersOfTheGame, PlayerTrickManageFactory trickManageFactory) {
 		this.playersOfTheGame = playersOfTheGame;
+		this.trickManageFactory = trickManageFactory;
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class PlayerManagerImpl implements PlayerManager{
 			if(m.getValue() < 7){
 				throw new IllegalArgumentException(m.getKey() + " , You are to too small to play this game ");
 			}
-			return new Player(m.getKey(), m.getValue());
+			return new Player(m.getKey(), m.getValue(), trickManageFactory);
 		}).collect(Collectors.toList());
 		
 	}

@@ -5,17 +5,24 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.ideas.uno.game.player.Player;
-import com.ideas.uno.game.player.PlayerManager;
 import com.ideas.uno.game.player.direction.NextReverseDirectionPlayer;
 
 public class NextReverseDirectionPlayerTest {
 
 	NextReverseDirectionPlayer nextReverseDirectionPlayer;
 
+	private PlayerTrickManageFactory trickManagerFactory;
+	
+	@Before
+	public void setUp(){
+		nextReverseDirectionPlayer = new NextReverseDirectionPlayer();
+		trickManagerFactory = new PlayerTrickManagerFactoryImpl();
+	}
+	
 	@Test
 	public void shouldReturnPreviousPlayerAsPerIterationWhenAnyPositionPlayerSearchedFromListOfPlayers() {
 		PlayerManager playerManager = Mockito.mock(PlayerManager.class);
@@ -23,7 +30,6 @@ public class NextReverseDirectionPlayerTest {
 		List<Player> players = populatePlayers();
 		System.out.println(players.toString());
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
-		nextReverseDirectionPlayer = new NextReverseDirectionPlayer();
 		Player nextPlayer = nextReverseDirectionPlayer.getNextPlayer(playerManager, players.get(position));
 		Collections.reverse(players);
 		System.out.println(nextPlayer);
@@ -42,7 +48,6 @@ public class NextReverseDirectionPlayerTest {
 		List<Player> players = populatePlayers();
 		int position = players.size() - 1;
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
-		nextReverseDirectionPlayer = new NextReverseDirectionPlayer();
 		Player nextPlayer = nextReverseDirectionPlayer.getNextPlayer(playerManager, players.get(position));
 		Collections.reverse(players);
 		Assert.assertTrue(nextPlayer.equals(players.get(position - 1)));
@@ -60,7 +65,6 @@ public class NextReverseDirectionPlayerTest {
 		int position = 0;
 		List<Player> players = populatePlayers();
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
-		nextReverseDirectionPlayer = new NextReverseDirectionPlayer();
 		Player nextPlayer = nextReverseDirectionPlayer.getNextPlayer(playerManager, players.get(position));
 		Collections.reverse(players);
 		Assert.assertTrue(nextPlayer.equals(players.get(players.size() - 1)));
@@ -77,8 +81,7 @@ public class NextReverseDirectionPlayerTest {
 		PlayerManager playerManager = Mockito.mock(PlayerManager.class);
 		List<Player> players = populatePlayers();
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
-		Player playerOne = new Player("Ramsi", 30);
-		nextReverseDirectionPlayer = new NextReverseDirectionPlayer();
+		Player playerOne = new Player("Ramsi", 30,trickManagerFactory);
 		Player nextPlayer = nextReverseDirectionPlayer.getNextPlayer(playerManager, playerOne);
 		Collections.reverse(players);
 		Assert.assertTrue(nextPlayer.equals(players.get(players.size() - 1)));
@@ -92,10 +95,10 @@ public class NextReverseDirectionPlayerTest {
 
 	private List<Player> populatePlayers() {
 		List<Player> players = new ArrayList<>();
-		players.add(new Player("Nishant", 25));
-		players.add(new Player("Shivranjani", 24));
-		players.add(new Player("Priya", 18));
-		players.add(new Player("Saurabh", 20));
+		players.add(new Player("Nishant", 25, trickManagerFactory));
+		players.add(new Player("Shivranjani", 24, trickManagerFactory));
+		players.add(new Player("Priya", 18, trickManagerFactory));
+		players.add(new Player("Saurabh", 20, trickManagerFactory));
 		return players;
 	}
 }

@@ -14,6 +14,8 @@ import com.ideas.uno.game.player.PlayerManager;
 import com.ideas.uno.game.player.PlayerManagerImpl;
 import com.ideas.uno.game.player.PlayerScoreBoardManager;
 import com.ideas.uno.game.player.PlayerScoreBorad;
+import com.ideas.uno.game.player.PlayerTrickManageFactory;
+import com.ideas.uno.game.player.PlayerTrickManagerFactoryImpl;
 import com.ideas.uno.game.player.direction.DirectionManagerFactory;
 import com.ideas.uno.game.player.direction.DirectionManagerFactoryImpl;
 import com.ideas.uno.game.rules.Rule;
@@ -43,6 +45,8 @@ public class UnoGameExecutor implements Game {
 	
 	private DirectionManagerFactory directionManagerFactory;
 	
+	private PlayerTrickManageFactory trickManageFactory;
+	
 	/**
 	 * Initialize players,cardDeck and player score board with default values
 	 * @param playersOfTheGame
@@ -60,7 +64,8 @@ public class UnoGameExecutor implements Game {
 	public void loadGame() {
 		directionManagerFactory = new DirectionManagerFactoryImpl();
 		cardFactory = new CardFactoryImpl(directionManagerFactory);
-		this.playerManager = new PlayerManagerImpl(playersOfTheGame);
+		trickManageFactory = new PlayerTrickManagerFactoryImpl();
+		this.playerManager = new PlayerManagerImpl(playersOfTheGame,trickManageFactory);
 		this.playerManager.loadPlayer();
 		this.cardManager = new CardManagerImpl(CardDeck.getInstance());
 		this.scoreBoardManager = new PlayerScoreBoardManager(new PlayerScoreBorad(this.playerManager.getGamePlayers(), this.maxScorePointToWin));

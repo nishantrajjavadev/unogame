@@ -19,10 +19,13 @@ public class Player {
 
 	private int score;
 
-	public Player(final String name, final int age) {
+	private final PlayerTrickManageFactory trickManageFactory;
+	
+	public Player(final String name, final int age, final PlayerTrickManageFactory trickManageFactory) {
 		this.age = age;
 		this.name = name;
 		myCards = new ArrayList<Card>(20);
+		this.trickManageFactory = trickManageFactory;
 	}
 
 	public int getAge() {
@@ -59,7 +62,7 @@ public class Player {
 		if(discardPileCard == null){
 			return null;
 		}
-		myChance = new PlayerSimpleTrick(myCards, discardPileCard).myTrick();
+		myChance =  this.trickManageFactory.getPlayerTrick(PlayerTrickManageFactory.SIMPLE_TRICK, myCards, discardPileCard).myTrick();
 		if (myChance != null) {
 			sendHandCardToDiscardPileCard(cardManager.getCardDeck(), myChance);
 			if (this.myCards.size() == 0) {
@@ -105,7 +108,8 @@ public class Player {
 	}
 
 	public Card getNextTrickyCard(final CardManager cardManager) {
-		Card myTrickyCard = new PlayerWildCardTrick(myCards).myTrick();
+		
+		Card myTrickyCard = this.trickManageFactory.getPlayerTrick(PlayerTrickManageFactory.WILD_CARD_TRICK, myCards, null).myTrick();
 		if (myTrickyCard != null) {
 			sendHandCardToDiscardPileCard(cardManager.getCardDeck(), myTrickyCard);
 			if (this.myCards.size() == 0) {
