@@ -22,11 +22,13 @@ public class UnoGameController {
 		playersOfTheGame.put("PLAYER_1", 7);
 		playersOfTheGame.put("PLAYER_2", 8);
 		playersOfTheGame.put("PLAYER_3", 9);
-		playersOfTheGame.put("PLAYER_4", 10);
+		playersOfTheGame.put("PLAYER_4", 9);
+
 	}
 
 	public static void main(String[] args) {
 		try {
+			
 			Game gameUno = new UnoGameExecutor(playersOfTheGame, maxScorePointToWin);
 			GameManager gameManager = new GameManager(gameUno);
 			gameManager.loadGame();

@@ -1,15 +1,12 @@
 package com.ideas.uno.game.card;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.ideas.uno.game.card.Card;
-import com.ideas.uno.game.card.CardColor;
-import com.ideas.uno.game.card.CardFactory;
-import com.ideas.uno.game.card.CardManager;
-import com.ideas.uno.game.card.CardType;
 import com.ideas.uno.game.player.PlayerManager;
+import com.ideas.uno.game.player.direction.DirectionManagerFactoryImpl;
 import com.ideas.uno.game.rules.Draw2CardUnoPlay;
 import com.ideas.uno.game.rules.NormalCardUnoPlay;
 import com.ideas.uno.game.rules.ReverseCardUnoPlay;
@@ -20,8 +17,14 @@ import com.ideas.uno.game.rules.WildCardUnoPlay;
 
 public class CardFactoryTest {
 
-	CardFactory cardFactory = new CardFactory();
 	
+	CardFactory cardFactory;
+	
+	@Before
+	public void setUp(){
+		DirectionManagerFactoryImpl directionManagerFactoryImpl = Mockito.mock(DirectionManagerFactoryImpl.class);
+		cardFactory = new CardFactoryImpl(directionManagerFactoryImpl);
+	}
 	@Test
 	public void shouldReturnReverseCardUnoPlayInstanceWhenCardTypeIsReverse() {
 		PlayerManager playerManager = Mockito.mock(PlayerManager.class);

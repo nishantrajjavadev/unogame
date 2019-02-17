@@ -1,74 +1,29 @@
 package com.ideas.uno.game.player;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-
-import org.apache.commons.collections4.MapUtils;
-
 
 import com.ideas.uno.game.card.Card;
 import com.ideas.uno.game.card.CardManager;
-import com.ideas.uno.game.card.CardType;
 import com.ideas.uno.game.executor.Turn;
-import com.ideas.uno.game.player.direction.NextDirectionPlayer;
-import com.ideas.uno.game.player.direction.NextReverseDirectionPlayer;
+
 
 /**
- * Manage the player list
+ * Interface to Manage the player list
  *
  */
-public class PlayerManager {
+public interface PlayerManager {
 
-	private List<Player> players;
+	public List<Player> getGamePlayers();
 
-	public PlayerManager(final Map<String, Integer> playersOfTheGame) {
-		// Initialize players of the game
-		if(MapUtils.isEmpty(playersOfTheGame) || playersOfTheGame.size() < 2 || playersOfTheGame.size() > 10){
-			throw new IllegalArgumentException("Players details not correct");
-		}
-		this.players = playersOfTheGame.entrySet().stream().map(m -> {
-			if(m.getValue() < 7){
-				throw new IllegalArgumentException(m.getKey() + " , You are to too small to play this game ");
-			}
-			return new Player(m.getKey(), m.getValue());
-		}).collect(Collectors.toList());
-	}
+	public void distrubuteCards(CardManager cardManager);
 
-	public List<Player> getGamePlayers() {
-		return new ArrayList<>(this.players);
-	}
+	public Player getFirstPlayer();
 
-	public Player getFirstPlayer() {
-		return players.stream().min(Comparator.comparing(Player::getAge)).get();
-	}
+	public Turn getFirstPlayerIfNotNumberCard(Card currentCard, Player firstPlayer,
+			CardManager cardManager);
 
-	public Turn getPlayerIfNotNumberCard(Card currentCard, Player player, CardManager cardManager) {
-		if (CardType.DRAW_TWO.equals(currentCard.getCardType())) {
-			player.draw2CardPenalty(cardManager);
-			return new Turn(new NextDirectionPlayer(player, this).getNextPlayer(), currentCard);
-		} else if (CardType.WILD.equals(currentCard.getCardType())) {
-			return new Turn(new NextDirectionPlayer(player, this).getNextPlayer(), player.getNextTrickyCard(cardManager));
-		} else if (CardType.WILD_D4.equals(currentCard.getCardType())) {
-			player.wild4CardPenalty(cardManager);
-			return new Turn(new NextDirectionPlayer(player, this).getNextPlayer(), currentCard);
-		} else if (CardType.REVERSE.equals(currentCard.getCardType())) {
-			return new Turn(new NextReverseDirectionPlayer(player, this).getNextPlayer(), currentCard);
-		} else if (CardType.SKIP.equals(currentCard.getCardType())) {
-			return new Turn(new NextDirectionPlayer(player, this).getNextPlayer(), currentCard);
-		}
-		return new Turn(player, currentCard);
+	public void resetCards();
 
-	}
+	public void loadPlayer();
 
-	public void resetCards() {
-		this.players.stream().filter(player -> player.reset()).collect(Collectors.toList());
-	}
-
-	public void distrubuteCards(CardManager cardManager) {
-		this.players.forEach((player) -> cardManager.draw(player, 7));
-	}
 }

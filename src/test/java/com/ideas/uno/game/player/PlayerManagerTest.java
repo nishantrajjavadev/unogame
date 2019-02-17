@@ -12,6 +12,7 @@ import com.ideas.uno.game.card.Card;
 import com.ideas.uno.game.card.CardColor;
 import com.ideas.uno.game.card.CardDeck;
 import com.ideas.uno.game.card.CardManager;
+import com.ideas.uno.game.card.CardManagerImpl;
 import com.ideas.uno.game.card.CardType;
 import com.ideas.uno.game.executor.Turn;
 
@@ -29,9 +30,10 @@ public class PlayerManagerTest {
 	
 	@Before
 	public void setUp() {
-		cardManager = new CardManager(cardDeck);
+		cardManager = new CardManagerImpl(cardDeck);
 		loadPlayers();
-		playerManager = new PlayerManager(playersOfTheGame);
+		playerManager = new PlayerManagerImpl(playersOfTheGame);
+		playerManager.loadPlayer();
 	}
 
 	@Test
@@ -57,26 +59,14 @@ public class PlayerManagerTest {
 
 
 	@Test
-	public void shouldReturnNewColorWildPlayerIfNotNumberCard() {
-		playerManager.distrubuteCards(cardManager);
-		Card currentCard = new Card(CardColor.NONE, CardType.WILD, 50);
-		Player player = playerManager.getGamePlayers().get(0);
-		Turn turn = playerManager.getPlayerIfNotNumberCard(currentCard, player,
-				cardManager);
-		Assert.assertTrue(!currentCard.equals(turn.getPlayingCard()));
-		Assert.assertTrue(turn.getCurrentPlayer().getName().equals("PLAYER_3"));
-	}
-
-
-	@Test
 	public void shouldReturnNextPlayerReverseCard() {
 		playerManager.distrubuteCards(cardManager);
 		Card currentCard = new Card(CardColor.GREEN, CardType.REVERSE, 20);
 		Player player = playerManager.getGamePlayers().get(0);
-		Turn turn = playerManager.getPlayerIfNotNumberCard(currentCard, player,
+		Turn turn = playerManager.getFirstPlayerIfNotNumberCard(currentCard, player,
 				cardManager);
 		Assert.assertTrue(currentCard.equals(turn.getPlayingCard()));
-		Assert.assertTrue(turn.getCurrentPlayer().getName().equals("PLAYER_4"));
+		Assert.assertTrue(turn.getCurrentPlayer().getName().equals(playerManager.getGamePlayers().get(3).getName()));
 	}
 
 	@Test
@@ -84,7 +74,7 @@ public class PlayerManagerTest {
 		playerManager.distrubuteCards(cardManager);
 		Card currentCard = new Card(CardColor.RED, CardType.SKIP, 20);
 		Player player = playerManager.getGamePlayers().get(0);
-		Turn turn = playerManager.getPlayerIfNotNumberCard(currentCard, player,
+		Turn turn = playerManager.getFirstPlayerIfNotNumberCard(currentCard, player,
 				cardManager);
 		Assert.assertTrue(currentCard.equals(turn.getPlayingCard()));
 		Assert.assertTrue(turn.getCurrentPlayer().getName().equals("PLAYER_3"));
@@ -93,9 +83,9 @@ public class PlayerManagerTest {
 	@Test
 	public void shouldReturnSamePlayerNormalCard() {
 		playerManager.distrubuteCards(cardManager);
-		Card currentCard = new Card(CardColor.GREEN, CardType.NUMBER, 2);
+		Card currentCard = new Card(CardColor.GREEN, CardType.NUMBER, 20);
 		Player player = playerManager.getGamePlayers().get(0);
-		Turn turn = playerManager.getPlayerIfNotNumberCard(currentCard, player,
+		Turn turn = playerManager.getFirstPlayerIfNotNumberCard(currentCard, player,
 				cardManager);
 		Assert.assertTrue(currentCard.equals(turn.getPlayingCard()));
 		Assert.assertTrue(turn.getCurrentPlayer().getName()

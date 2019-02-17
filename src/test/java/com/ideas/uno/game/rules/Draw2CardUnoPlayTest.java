@@ -1,57 +1,53 @@
 package com.ideas.uno.game.rules;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import com.ideas.uno.game.card.CardDeck;
-import com.ideas.uno.game.card.CardManager;
+import com.ideas.uno.game.card.Card;
+import com.ideas.uno.game.card.CardManagerImpl;
+import com.ideas.uno.game.card.CardType;
+import com.ideas.uno.game.executor.Turn;
 import com.ideas.uno.game.player.Player;
-import com.ideas.uno.game.player.PlayerManager;
+import com.ideas.uno.game.player.PlayerManagerImpl;
+import com.ideas.uno.game.player.direction.DirectionManagerFactoryImpl;
 import com.ideas.uno.game.player.direction.NextDirectionPlayer;
 
 
 public class Draw2CardUnoPlayTest {
 
-	private Map<String, Integer> playersOfTheGame;
-	private PlayerManager playerManager;
-	private CardManager cardManager;
+	private PlayerManagerImpl playerManager;
+	private CardManagerImpl cardManager;
+	private Player player;
+	private DirectionManagerFactoryImpl directionManagerFactoryImpl;
+	private NextDirectionPlayer nextDirectionPlayer;
 	private Draw2CardUnoPlay draw2CardUnoPlay;
-	private static CardDeck cardDeck;
 
-	@BeforeClass
-	public static void beforeClass() {
-		cardDeck = CardDeck.getInstance();
-	}
-	
 	@Before
 	public void setUp(){
-		loadPlayers();
-		cardManager = new CardManager(cardDeck);
-		playerManager = new PlayerManager(playersOfTheGame);
-		draw2CardUnoPlay = new Draw2CardUnoPlay(playerManager, cardManager);
+		cardManager = Mockito.mock(CardManagerImpl.class);
+		playerManager = Mockito.mock(PlayerManagerImpl.class);
+		player = Mockito.mock(Player.class);
+		directionManagerFactoryImpl = Mockito.mock(DirectionManagerFactoryImpl.class);
+		nextDirectionPlayer = Mockito.mock(NextDirectionPlayer.class);
+		Mockito.when(nextDirectionPlayer.getNextPlayer(playerManager, player)).thenReturn(player);
+		draw2CardUnoPlay = new Draw2CardUnoPlay(playerManager, cardManager ,directionManagerFactoryImpl);
 	}
 	
 	
 	@Test
 	public void shouldHavePenalty2drawcardPlayer() {
-		playerManager.distrubuteCards(cardManager);
-		Player player = playerManager.getGamePlayers().get(0);
-		draw2CardUnoPlay.play(playerManager.getGamePlayers().get(0).getCards().get(0), playerManager.getGamePlayers().get(0));
-		Player nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
-		Assert.assertTrue(nextPlayer.getCards().size() == 9);
-	}
-	
-	private Map<String, Integer> loadPlayers() {
-		playersOfTheGame = new HashMap<String, Integer>();
-		playersOfTheGame.put("Nishant", 7);
-		playersOfTheGame.put("Arpan", 8);
-		playersOfTheGame.put("Shivranjani", 9);
-		playersOfTheGame.put("Sahil", 10);
-		return playersOfTheGame;
+		Card card= new Card(null, CardType.DRAW_TWO, 10);
+		Mockito.when(directionManagerFactoryImpl.getDirection(card.getCardType())).thenReturn(nextDirectionPlayer);
+		Mockito.when(nextDirectionPlayer.getNextPlayer(playerManager, player)).thenReturn(player);
+		Mockito.when(player.turn(card, cardManager)).thenReturn(card);
+		Mockito.doNothing().when(player).draw2CardPenalty(cardManager);
+		Turn turn = draw2CardUnoPlay.play(card, player);
+		Assert.assertEquals(turn.getPlayingCard(), card);
+		Mockito.verify(player).draw2CardPenalty(cardManager);
+		Mockito.verify(directionManagerFactoryImpl, Mockito.times(2)).getDirection(card.getCardType());
+		Mockito.verify(nextDirectionPlayer, Mockito.times(2)).getNextPlayer(playerManager, player);
+		Mockito.verify(player).turn(card, cardManager);
 	}
 }

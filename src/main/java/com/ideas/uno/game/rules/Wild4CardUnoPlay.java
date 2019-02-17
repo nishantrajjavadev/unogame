@@ -8,7 +8,8 @@ import com.ideas.uno.game.card.CardManager;
 import com.ideas.uno.game.executor.Turn;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
-import com.ideas.uno.game.player.direction.NextDirectionPlayer;
+import com.ideas.uno.game.player.direction.DirectionManager;
+import com.ideas.uno.game.player.direction.DirectionManagerFactory;
 
 /**
  * Wild4 card rule
@@ -20,19 +21,23 @@ public class Wild4CardUnoPlay implements Rule {
 	
 	private final CardManager cardManager;
 
-	public Wild4CardUnoPlay(PlayerManager playerManager, CardManager cardManager) {
-		this.playerManager = playerManager;
-		this.cardManager = cardManager;
-	}
+	private final DirectionManagerFactory directionManagerFactory;
+		
+	public Wild4CardUnoPlay(PlayerManager playerManager, CardManager cardManager, DirectionManagerFactory directionManagerFactory) {
+			this.playerManager = playerManager;
+			this.cardManager = cardManager;
+			this.directionManagerFactory = directionManagerFactory;
+		}
 
 	@Override
 	public Turn play(final Card myCurrentCard, final Player player) {
+		DirectionManager directionManager = directionManagerFactory.getDirection(myCurrentCard.getCardType());
 		Card playerChanceCard = player.getNextTrickyCard(this.cardManager);
-		Player nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
+		Player nextPlayer = directionManager.getNextPlayer(this.playerManager, player);
 		nextPlayer.wild4CardPenalty(this.cardManager);
-		nextPlayer = new NextDirectionPlayer(nextPlayer, this.playerManager).getNextPlayer();
+		nextPlayer = directionManager.getNextPlayer(this.playerManager, nextPlayer);
 		playerChanceCard = nextPlayer.turn(playerChanceCard, this.cardManager);
-		nextPlayer = new NextDirectionPlayer(nextPlayer, this.playerManager).getNextPlayer();
+		nextPlayer = directionManager.getNextPlayer(this.playerManager, nextPlayer);
 		return new Turn(nextPlayer, playerChanceCard);
 	}
 

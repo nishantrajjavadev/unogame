@@ -1,56 +1,54 @@
 package com.ideas.uno.game.rules;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ideas.uno.game.card.Card;
-import com.ideas.uno.game.card.CardColor;
-import com.ideas.uno.game.card.CardDeck;
 import com.ideas.uno.game.card.CardManager;
+import com.ideas.uno.game.card.CardManagerImpl;
 import com.ideas.uno.game.card.CardType;
 import com.ideas.uno.game.executor.Turn;
+import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
+import com.ideas.uno.game.player.PlayerManagerImpl;
+import com.ideas.uno.game.player.direction.DirectionManagerFactoryImpl;
+import com.ideas.uno.game.player.direction.NextDirectionPlayer;
 
-@Ignore
+@RunWith(MockitoJUnitRunner.class)
 public class ReverseCardUnoPlayTest {
 
-	private Map<String, Integer> playersOfTheGame;
 	private PlayerManager playerManager;
 	private CardManager cardManager;
+	private Player player;
+	private DirectionManagerFactoryImpl directionManagerFactoryImpl;
+	private NextDirectionPlayer nextDirectionPlayer;
 	private ReverseCardUnoPlay reverseCardUnoPlay;
-	private static CardDeck cardDeck;
-
-	@BeforeClass
-	public static void beforeClass() {
-		cardDeck = CardDeck.getInstance();
-	}
+	
 	@Before
 	public void setUp(){
-		loadPlayers();
-		cardManager = new CardManager(cardDeck);
-		playerManager = new PlayerManager(playersOfTheGame);
-		reverseCardUnoPlay = new ReverseCardUnoPlay(playerManager, cardManager);
+		cardManager = Mockito.mock(CardManagerImpl.class);
+		playerManager = Mockito.mock(PlayerManagerImpl.class);
+		player = Mockito.mock(Player.class);
+		directionManagerFactoryImpl = Mockito.mock(DirectionManagerFactoryImpl.class);
+		nextDirectionPlayer = Mockito.mock(NextDirectionPlayer.class);
+		Mockito.when(nextDirectionPlayer.getNextPlayer(playerManager, player)).thenReturn(player);
+		reverseCardUnoPlay = new ReverseCardUnoPlay(playerManager, cardManager, directionManagerFactoryImpl);
 	}
 	
 	@Test
 	public void shouldReturnReverseNextPlayer() {
-		playerManager.distrubuteCards(cardManager);
-		Turn turn = reverseCardUnoPlay.play(new Card(CardColor.BLUE, CardType.REVERSE, 20), playerManager.getGamePlayers().get(0));
-		Assert.assertTrue(turn.getCurrentPlayer().equals(playerManager.getGamePlayers().get(3)));
+		Card card= new Card(null, CardType.REVERSE, 10);
+		Mockito.when(player.turn(card, cardManager)).thenReturn(card);
+		Mockito.when(directionManagerFactoryImpl.getDirection(card.getCardType())).thenReturn(nextDirectionPlayer);
+		Turn turn = reverseCardUnoPlay.play(card, player);
+		Assert.assertEquals(turn.getPlayingCard(), card);
+		Mockito.verify(directionManagerFactoryImpl).getDirection(card.getCardType());
+		Mockito.verify(nextDirectionPlayer).getNextPlayer(playerManager, player);
+		Mockito.verify(player).turn(card, cardManager);
 	}
 	
-	private Map<String, Integer> loadPlayers() {
-		playersOfTheGame = new HashMap<String, Integer>();
-		playersOfTheGame.put("PLAYER_1", 7);
-		playersOfTheGame.put("PLAYER_2", 8);
-		playersOfTheGame.put("PLAYER_3", 9);
-		playersOfTheGame.put("PLAYER_4", 10);
-		return playersOfTheGame;
-	}
 }

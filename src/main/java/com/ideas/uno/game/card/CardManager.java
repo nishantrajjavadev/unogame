@@ -2,28 +2,11 @@ package com.ideas.uno.game.card;
 
 import com.ideas.uno.game.player.Player;
 
-public class CardManager {
+public interface CardManager {
 
-	private final CardDeck cardDeck;
+	void draw(Player player, int noOfCards);
 
-	public CardManager(CardDeck cardDeck) {
-		this.cardDeck = cardDeck;
-	}
-	
-	public CardDeck getCardDeck() {
-		return cardDeck;
-	}
+	CardDeck getCardDeck();
 
-	public void resetCardDeck() {
-		this.cardDeck.reset();
-	}
-
-	public void draw(Player player, int noOfCards) {
-		for (int i = 0; i < noOfCards; i++) {
-			if (cardDeck.getDrawPile().size() > 0) {
-				player.addCard(cardDeck.getDrawPile().pop());
-			}
-		}
-	}
-
+	void resetCardDeck();
 }

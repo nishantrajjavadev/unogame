@@ -21,9 +21,8 @@ public class NextDirectionPlayerTest {
 		int position = 2;
 		List<Player> players = populatePlayers();
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
-		nextDirectionPlayer = new NextDirectionPlayer(players.get(position),
-				playerManager);
-		Player nextPlayer = nextDirectionPlayer.getNextPlayer();
+		nextDirectionPlayer = new NextDirectionPlayer();
+		Player nextPlayer = nextDirectionPlayer.getNextPlayer(playerManager, players.get(position));
 		Assert.assertTrue(nextPlayer.equals(players.get(position + 1)));
 		Assert.assertEquals(nextPlayer.getName(), players.get(position + 1)
 				.getName());
@@ -38,9 +37,9 @@ public class NextDirectionPlayerTest {
 		PlayerManager playerManager = Mockito.mock(PlayerManager.class);
 		List<Player> players = populatePlayers();
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
-		nextDirectionPlayer = new NextDirectionPlayer(players.get(players
-				.size() - 1), playerManager);
-		Player nextPlayer = nextDirectionPlayer.getNextPlayer();
+		nextDirectionPlayer = new NextDirectionPlayer();
+		Player nextPlayer = nextDirectionPlayer.getNextPlayer(playerManager, players.get(players
+				.size() - 1));
 		Assert.assertTrue(nextPlayer.equals(players.get(0)));
 		Assert.assertEquals(nextPlayer.getName(), players.get(0).getName());
 		Assert.assertEquals(nextPlayer.getAge(), players.get(0).getAge());
@@ -53,9 +52,8 @@ public class NextDirectionPlayerTest {
 		int position = 0;
 		List<Player> players = populatePlayers();
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
-		nextDirectionPlayer = new NextDirectionPlayer(players.get(position),
-				playerManager);
-		Player nextPlayer = nextDirectionPlayer.getNextPlayer();
+		nextDirectionPlayer = new NextDirectionPlayer();
+		Player nextPlayer = nextDirectionPlayer.getNextPlayer(playerManager, players.get(position));
 		Assert.assertTrue(nextPlayer.equals(players.get(position + 1)));
 		Assert.assertEquals(nextPlayer.getName(), players.get(position + 1)
 				.getName());
@@ -69,10 +67,10 @@ public class NextDirectionPlayerTest {
 	public void shoudReturnFirstPlayerFromListIfSearchedPlayerIsNotInList() {
 		PlayerManager playerManager = Mockito.mock(PlayerManager.class);
 		List<Player> players = populatePlayers();
-		Player playerOne = new Player("Ramsi", 30);
+		Player playerOne = new Player("PLAYER_!", 30);
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
-		nextDirectionPlayer = new NextDirectionPlayer(playerOne, playerManager);
-		Player nextPlayer = nextDirectionPlayer.getNextPlayer();
+		nextDirectionPlayer = new NextDirectionPlayer();
+		Player nextPlayer = nextDirectionPlayer.getNextPlayer(playerManager, playerOne);
 		Assert.assertTrue(nextPlayer.equals(players.get(0)));
 		Assert.assertEquals(nextPlayer.getName(), players.get(0).getName());
 		Assert.assertEquals(nextPlayer.getAge(), players.get(0).getAge());

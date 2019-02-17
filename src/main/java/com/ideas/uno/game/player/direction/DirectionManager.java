@@ -5,20 +5,13 @@ import java.util.List;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
 
-public abstract class DirectionManager {
+@FunctionalInterface
+public interface DirectionManager {
 
-	protected Player player;
+	public abstract Player getNextPlayer(final PlayerManager playerManager,
+			final Player player);
 
-	protected PlayerManager playerManager;
-
-	public DirectionManager(Player player, PlayerManager playerManager) {
-		this.player = player;
-		this.playerManager = playerManager;
-	}
-
-	protected abstract Player getNextPlayer();
-
-	protected int getPlayerCurrentPostion(List<Player> players) {
-		return players.indexOf(this.player);
+	public default int getPlayerCurrentPostion(final List<Player> players, final Player player) {
+		return players.indexOf(player);
 	}
 }

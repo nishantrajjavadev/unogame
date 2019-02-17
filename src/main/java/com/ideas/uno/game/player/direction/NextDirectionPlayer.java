@@ -5,16 +5,12 @@ import java.util.List;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
 
-public class NextDirectionPlayer extends DirectionManager {
-
-	public NextDirectionPlayer(Player player, PlayerManager playerManager) {
-		super(player, playerManager);
-	}
+public class NextDirectionPlayer implements DirectionManager {
 
 	@Override
-	public Player getNextPlayer() {
-		List<Player> players = this.playerManager.getGamePlayers();
-		int index = getPlayerCurrentPostion(players);
+	public Player getNextPlayer(final PlayerManager playerManager, final Player player) {
+		List<Player> players = playerManager.getGamePlayers();
+		int index = getPlayerCurrentPostion(players, player);
 		if (index == (players.size() - 1)) {
 			return players.get(0);
 		} else {

@@ -6,12 +6,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.ideas.uno.game.card.Card;
 import com.ideas.uno.game.card.CardDeck;
 import com.ideas.uno.game.card.CardFactory;
+import com.ideas.uno.game.card.CardFactoryImpl;
 import com.ideas.uno.game.card.CardManager;
-import com.ideas.uno.game.card.CardType;
+import com.ideas.uno.game.card.CardManagerImpl;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
+import com.ideas.uno.game.player.PlayerManagerImpl;
 import com.ideas.uno.game.player.PlayerScoreBoardManager;
 import com.ideas.uno.game.player.PlayerScoreBorad;
+import com.ideas.uno.game.player.direction.DirectionManagerFactory;
+import com.ideas.uno.game.player.direction.DirectionManagerFactoryImpl;
 import com.ideas.uno.game.rules.Rule;
 
 /**
@@ -35,6 +39,10 @@ public class UnoGameExecutor implements Game {
 	
 	private Map<String, Integer> playersOfTheGame;
 	
+	private CardFactory cardFactory;
+	
+	private DirectionManagerFactory directionManagerFactory;
+	
 	/**
 	 * Initialize players,cardDeck and player score board with default values
 	 * @param playersOfTheGame
@@ -50,10 +58,16 @@ public class UnoGameExecutor implements Game {
 	 */
 	@Override
 	public void loadGame() {
-		playerManager = new PlayerManager(playersOfTheGame);
-		this.cardManager = new CardManager(CardDeck.getInstance());
+		directionManagerFactory = new DirectionManagerFactoryImpl();
+		cardFactory = new CardFactoryImpl(directionManagerFactory);
+		this.playerManager = new PlayerManagerImpl(playersOfTheGame);
+		this.playerManager.loadPlayer();
+		this.cardManager = new CardManagerImpl(CardDeck.getInstance());
 		this.scoreBoardManager = new PlayerScoreBoardManager(new PlayerScoreBorad(this.playerManager.getGamePlayers(), this.maxScorePointToWin));
+		System.out.println("-------------------Dealing Cards---------------");
 		this.playerManager.distrubuteCards(cardManager);
+		System.out.println("-------------------7 cards to each player---------------");
+		System.out.println("-------------------Lets Play---------------");
 	}
 
 	/**
@@ -78,7 +92,7 @@ public class UnoGameExecutor implements Game {
 			Card playingCard = currentTurn.getPlayingCard();
 			// break game in case of no card left to one player
 			
-			Rule unoPlay = new CardFactory().getPlayingCard(playingCard, this.playerManager, this.cardManager);
+			Rule unoPlay = this.cardFactory.getPlayingCard(playingCard, this.playerManager, this.cardManager);
 			currentTurn = unoPlay.play(playingCard, currentPlayer);
 		}
 
@@ -100,8 +114,8 @@ public class UnoGameExecutor implements Game {
 	 * @param currentCard
 	 * @return
 	 */
-	private Turn getFirstDrawPileCard(Player firstPlayer, Card currentCard) {
-		Turn currentTurn = CardType.NUMBER.equals(currentCard.getCardType()) ? new Turn(firstPlayer, currentCard) : this.playerManager.getPlayerIfNotNumberCard(currentCard, firstPlayer, cardManager);
+	public Turn getFirstDrawPileCard(Player firstPlayer, Card currentCard) {
+		Turn currentTurn =  this.playerManager.getFirstPlayerIfNotNumberCard(currentCard, firstPlayer, this.cardManager);
 		return currentTurn;
 	}
 

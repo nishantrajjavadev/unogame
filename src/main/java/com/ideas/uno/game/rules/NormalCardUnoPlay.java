@@ -9,7 +9,8 @@ import com.ideas.uno.game.card.CardType;
 import com.ideas.uno.game.executor.Turn;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
-import com.ideas.uno.game.player.direction.NextDirectionPlayer;
+import com.ideas.uno.game.player.direction.DirectionManager;
+import com.ideas.uno.game.player.direction.DirectionManagerFactory;
 
 /**
  * Normal card rule
@@ -21,18 +22,25 @@ public class NormalCardUnoPlay implements Rule {
 
 	private final CardManager cardManager;
 
-	public NormalCardUnoPlay(PlayerManager playerManager, CardManager cardManager) {
+	private final DirectionManagerFactory directionManagerFactory;
+	
+	public NormalCardUnoPlay(PlayerManager playerManager, CardManager cardManager, DirectionManagerFactory directionManagerFactory) {
 		this.playerManager = playerManager;
 		this.cardManager = cardManager;
+		this.directionManagerFactory = directionManagerFactory;
 	}
 
 	@Override
 	public Turn play(final Card discardPileCard, final Player player) {
 		Card myChanceCard = player.turn(discardPileCard, this.cardManager);
+		if(myChanceCard == null){
+			return new Turn(player, null);
+		}
 		if (myChanceCard != null && isActionCard(myChanceCard)) {
 			return new Turn(player, myChanceCard);
 		}
-		Player nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
+		DirectionManager directionManager = directionManagerFactory.getDirection(myChanceCard.getCardType());
+		Player nextPlayer = directionManager.getNextPlayer(this.playerManager, player);
 		return new Turn(nextPlayer, myChanceCard);
 	}
 

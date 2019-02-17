@@ -6,17 +6,13 @@ import java.util.List;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
 
-public class NextReverseDirectionPlayer extends DirectionManager {
-
-	public NextReverseDirectionPlayer(Player player, PlayerManager playerManager) {
-		super(player, playerManager);
-	}
+public class NextReverseDirectionPlayer implements DirectionManager {
 
 	@Override
-	public Player getNextPlayer() {
-		List<Player> players = this.playerManager.getGamePlayers();
+	public Player getNextPlayer(PlayerManager playerManager, Player player) {
+		List<Player> players = playerManager.getGamePlayers();
 		Collections.reverse(players);
-		int index = getPlayerCurrentPostion(players);
+		int index = getPlayerCurrentPostion(players, player);
 		if (index == (players.size() - 1)) {
 			return players.get(0);
 		} else {

@@ -1,57 +1,51 @@
 package com.ideas.uno.game.rules;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import com.ideas.uno.game.card.CardDeck;
-import com.ideas.uno.game.card.CardManager;
+import com.ideas.uno.game.card.Card;
+import com.ideas.uno.game.card.CardManagerImpl;
+import com.ideas.uno.game.card.CardType;
 import com.ideas.uno.game.executor.Turn;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
+import com.ideas.uno.game.player.PlayerManagerImpl;
+import com.ideas.uno.game.player.direction.DirectionManagerFactoryImpl;
 import com.ideas.uno.game.player.direction.NextDirectionPlayer;
 
 
 public class SkipCardUnoPlayTest {
 
-	private Map<String, Integer> playersOfTheGame;
 	private PlayerManager playerManager;
-	private CardManager cardManager;
+	private CardManagerImpl cardManager;
 	private SkipCardUnoPlay skipCardUnoPlay;
-	private static CardDeck cardDeck;
+	private Player player;
+	private DirectionManagerFactoryImpl directionManagerFactoryImpl;
+	private NextDirectionPlayer nextDirectionPlayer;
 
-	@BeforeClass
-	public static void beforeClass() {
-		cardDeck = CardDeck.getInstance();
-	}
 	@Before
 	public void setUp(){
-		loadPlayers();
-		cardManager = new CardManager(cardDeck);
-		playerManager = new PlayerManager(playersOfTheGame);
-		skipCardUnoPlay = new SkipCardUnoPlay(playerManager, cardManager);
+		cardManager = Mockito.mock(CardManagerImpl.class);
+		playerManager = Mockito.mock(PlayerManagerImpl.class);
+		player = Mockito.mock(Player.class);
+		directionManagerFactoryImpl = Mockito.mock(DirectionManagerFactoryImpl.class);
+		nextDirectionPlayer = Mockito.mock(NextDirectionPlayer.class);
+		Mockito.when(nextDirectionPlayer.getNextPlayer(playerManager, player)).thenReturn(player);
+		skipCardUnoPlay = new SkipCardUnoPlay(playerManager, cardManager, directionManagerFactoryImpl);
 	}
 	
 	@Test
 	public void shouldReturnNextSkipPlayer() {
-		playerManager.distrubuteCards(cardManager);
-		Player player = playerManager.getGamePlayers().get(0);
-		Turn turn = skipCardUnoPlay.play(playerManager.getGamePlayers().get(0).getCards().get(0), playerManager.getGamePlayers().get(0));
-		Player nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
-		nextPlayer = new NextDirectionPlayer(nextPlayer, this.playerManager).getNextPlayer();
-		Assert.assertTrue(turn.getCurrentPlayer().equals(nextPlayer));
+		Card card= new Card(null, CardType.SKIP, 10);
+		Mockito.when(player.turn(card, cardManager)).thenReturn(card);
+		Mockito.when(directionManagerFactoryImpl.getDirection(card.getCardType())).thenReturn(nextDirectionPlayer);
+		Turn turn = skipCardUnoPlay.play(card, player);
+		Assert.assertEquals(turn.getPlayingCard(), card);
+		Mockito.verify(directionManagerFactoryImpl).getDirection(card.getCardType());
+		Mockito.verify(nextDirectionPlayer, Mockito.times(2)).getNextPlayer(playerManager, player);
+		Mockito.verify(player).turn(card, cardManager);
 	}
 	
-	private Map<String, Integer> loadPlayers() {
-		playersOfTheGame = new HashMap<String, Integer>();
-		playersOfTheGame.put("Nishant", 7);
-		playersOfTheGame.put("Arpan", 8);
-		playersOfTheGame.put("Shivranjani", 9);
-		playersOfTheGame.put("Sahil", 10);
-		return playersOfTheGame;
-	}
 }

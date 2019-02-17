@@ -14,7 +14,7 @@ public class CardManagerTest {
 	}
 	@Before
 	public void init() {
-		new CardManager(cardDeck);
+		new CardManagerImpl(cardDeck);
 	}
 	
 }

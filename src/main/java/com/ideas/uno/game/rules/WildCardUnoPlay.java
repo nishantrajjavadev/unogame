@@ -9,7 +9,8 @@ import com.ideas.uno.game.card.CardType;
 import com.ideas.uno.game.executor.Turn;
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
-import com.ideas.uno.game.player.direction.NextDirectionPlayer;
+import com.ideas.uno.game.player.direction.DirectionManager;
+import com.ideas.uno.game.player.direction.DirectionManagerFactory;
 
 /**
  * Wild card rule
@@ -21,9 +22,12 @@ public class WildCardUnoPlay implements Rule {
 
 	private final CardManager cardManager;
 
-	public WildCardUnoPlay(PlayerManager playerManager, CardManager cardManager) {
-		this.playerManager = playerManager;
-		this.cardManager = cardManager;
+	private final DirectionManagerFactory directionManagerFactory;
+	
+	public WildCardUnoPlay(PlayerManager playerManager, CardManager cardManager, DirectionManagerFactory directionManagerFactory) {
+			this.playerManager = playerManager;
+			this.cardManager = cardManager;
+			this.directionManagerFactory = directionManagerFactory;
 	}
 
 	@Override
@@ -32,24 +36,24 @@ public class WildCardUnoPlay implements Rule {
 		if(playerChanceCard == null){
 			return new Turn(player, null);
 		}
+		CardType cardType = playerChanceCard.getCardType();
+		DirectionManager directionManager = directionManagerFactory.getDirection(cardType);
 		Player nextPlayer = null;
-		if (CardType.WILD_D4.equals(playerChanceCard.getCardType())) {
-			nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
+		if (CardType.WILD_D4.equals(cardType)) {
+			nextPlayer = directionManager.getNextPlayer(this.playerManager, player);
 			nextPlayer.wild4CardPenalty(this.cardManager);
-		} else if (CardType.DRAW_TWO.equals(playerChanceCard.getCardType())) {
-			nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
+		} else if (CardType.DRAW_TWO.equals(cardType)) {
+			nextPlayer = directionManager.getNextPlayer(this.playerManager, player);
 			nextPlayer.draw2CardPenalty(this.cardManager);
-		} else if (CardType.WILD.equals(playerChanceCard.getCardType())) {
+		} else if (CardType.WILD.equals(cardType)) {
 			playerChanceCard = player.getNextTrickyCard(this.cardManager);
 		}
-		if (nextPlayer != null) {
-			nextPlayer = new NextDirectionPlayer(nextPlayer, this.playerManager).getNextPlayer();
-		} else {
-			nextPlayer = new NextDirectionPlayer(player, this.playerManager).getNextPlayer();
-		}
+		if (nextPlayer == null) {
+			nextPlayer = player;
+		} 
+		nextPlayer = directionManager.getNextPlayer(this.playerManager, nextPlayer);
 		Card nextPlayerCard = nextPlayer.turn(playerChanceCard, this.cardManager);
-		nextPlayer = new NextDirectionPlayer(nextPlayer, this.playerManager).getNextPlayer();
-		return new Turn(nextPlayer, nextPlayerCard);
+		return new Turn(directionManager.getNextPlayer(this.playerManager, nextPlayer), nextPlayerCard);
 	}
 
 }
