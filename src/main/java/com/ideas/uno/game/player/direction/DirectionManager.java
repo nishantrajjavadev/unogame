@@ -14,4 +14,18 @@ public interface DirectionManager {
 	public default int getPlayerCurrentPostion(final List<Player> players, final Player player) {
 		return players.indexOf(player);
 	}
+	
+	/**
+	 * @param player
+	 * @param players
+	 * @return
+	 */
+	public default Player getPlayerNextPosition(Player player, List<Player> players) {
+		int index = getPlayerCurrentPostion(players, player);
+		if (index == (players.size() - 1)) {
+			return players.get(0);
+		} else {
+			return players.get(index + 1);
+		}
+	}
 }

@@ -30,9 +30,9 @@ public class PlayerSimpleTrick implements Trick {
 		if(myMatchingNumberCards.size() > 0) {
 			return myMatchingNumberCards.get(0);
 		} 
-		List<Card> specialCards = getActionCardList(this.myCards, this.discardPileCard);
-		if(specialCards.size() > 0) {
-			return specialCards.get(0);
+		List<Card> actionCards = getActionCardList(this.myCards, this.discardPileCard);
+		if(actionCards.size() > 0) {
+			return actionCards.get(0);
 		}
 		List<Card> myWildCards = getAnyWildCard(this.myCards);
 		if (myWildCards.size() > 0) {

@@ -10,12 +10,7 @@ public class NextDirectionPlayer implements DirectionManager {
 	@Override
 	public Player getNextPlayer(final PlayerManager playerManager, final Player player) {
 		List<Player> players = playerManager.getGamePlayers();
-		int index = getPlayerCurrentPostion(players, player);
-		if (index == (players.size() - 1)) {
-			return players.get(0);
-		} else {
-			return players.get(index + 1);
-		}
+		return getPlayerNextPosition(player, players);
 	}
 
 }

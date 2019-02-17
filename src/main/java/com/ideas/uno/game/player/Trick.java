@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.ideas.uno.game.card.Card;
 import com.ideas.uno.game.card.CardType;
 
+@FunctionalInterface
 public interface Trick {
 	public Card myTrick();
 
