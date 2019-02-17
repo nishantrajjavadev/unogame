@@ -11,9 +11,9 @@ import com.ideas.uno.game.card.CardType;
 
 public class Player {
 
-	final private int age;
+	private final int age;
 
-	final private String name;
+	private final String name;
 
 	private final List<Card> myCards;
 
@@ -24,7 +24,7 @@ public class Player {
 	public Player(final String name, final int age, final PlayerTrickManageFactory trickManageFactory) {
 		this.age = age;
 		this.name = name;
-		myCards = new ArrayList<Card>(20);
+		myCards = new ArrayList<>(20);
 		this.trickManageFactory = trickManageFactory;
 	}
 
@@ -62,10 +62,10 @@ public class Player {
 		if(discardPileCard == null){
 			return null;
 		}
-		myChance =  this.trickManageFactory.getPlayerTrick(PlayerTrickManageFactory.SIMPLE_TRICK, myCards, discardPileCard).myTrick();
+		myChance =  this.trickManageFactory.getPlayerTrick(PlayerTrickEnum.SIMPLE_TRICK, myCards, discardPileCard).myTrick();
 		if (myChance != null) {
 			sendHandCardToDiscardPileCard(cardManager.getCardDeck(), myChance);
-			if (this.myCards.size() == 0) {
+			if (this.myCards.isEmpty()) {
 				return null;
 			}
 			return myChance;
@@ -75,7 +75,7 @@ public class Player {
 			addCard(newDard);
 			if (newDard.getCardColors().equals(discardPileCard.getCardColors()) || CardType.WILD.equals(newDard.getCardType()) || CardType.WILD_D4.equals(newDard.getCardType())) {
 				sendHandCardToDiscardPileCard(cardManager.getCardDeck(), newDard);
-				if (this.myCards.size() == 0) {
+				if (this.myCards.isEmpty()) {
 					return null;
 				}
 				return newDard;
@@ -109,10 +109,10 @@ public class Player {
 
 	public Card getNextTrickyCard(final CardManager cardManager) {
 		
-		Card myTrickyCard = this.trickManageFactory.getPlayerTrick(PlayerTrickManageFactory.WILD_CARD_TRICK, myCards, null).myTrick();
+		Card myTrickyCard = this.trickManageFactory.getPlayerTrick(PlayerTrickEnum.WILD_CARD_TRICK, myCards, null).myTrick();
 		if (myTrickyCard != null) {
 			sendHandCardToDiscardPileCard(cardManager.getCardDeck(), myTrickyCard);
-			if (this.myCards.size() == 0) {
+			if (this.myCards.isEmpty()) {
 				return null;
 			}
 		}

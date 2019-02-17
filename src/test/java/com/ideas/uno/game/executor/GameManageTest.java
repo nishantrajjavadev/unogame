@@ -10,7 +10,7 @@ public class GameManageTest {
 	private UnoGameExecutor unoGameExecutor;
 	
 	@Before
-	public void setUp() throws Exception{
+	public void setUp(){
 		unoGameExecutor = Mockito.mock(UnoGameExecutor.class);
 		gameManager = new GameManager(unoGameExecutor);
 	}

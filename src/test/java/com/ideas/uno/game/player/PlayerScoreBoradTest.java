@@ -9,8 +9,6 @@ import org.junit.Test;
 import com.ideas.uno.game.card.Card;
 import com.ideas.uno.game.card.CardColor;
 import com.ideas.uno.game.card.CardType;
-import com.ideas.uno.game.player.Player;
-import com.ideas.uno.game.player.PlayerScoreBorad;
 
 public class PlayerScoreBoradTest {
 

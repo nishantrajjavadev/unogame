@@ -20,7 +20,7 @@ public class UpdateDrawPile implements DrawPileObserver {
 	@Override
 	public void updateDrawPile() {
 		while (true) {
-			if (discardPile.size() == 0) {
+			if (discardPile.isEmpty()) {
 				break;
 			}
 			drawPile.push(discardPile.pop());

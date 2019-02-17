@@ -43,10 +43,6 @@ public class UnoGameExecutor implements Game {
 	
 	private CardFactory cardFactory;
 	
-	private DirectionManagerFactory directionManagerFactory;
-	
-	private PlayerTrickManageFactory trickManageFactory;
-	
 	/**
 	 * Initialize players,cardDeck and player score board with default values
 	 * @param playersOfTheGame
@@ -62,9 +58,9 @@ public class UnoGameExecutor implements Game {
 	 */
 	@Override
 	public void loadGame() {
-		directionManagerFactory = new DirectionManagerFactoryImpl();
+		DirectionManagerFactory directionManagerFactory = new DirectionManagerFactoryImpl();
 		cardFactory = new CardFactoryImpl(directionManagerFactory);
-		trickManageFactory = new PlayerTrickManagerFactoryImpl();
+		PlayerTrickManageFactory trickManageFactory = new PlayerTrickManagerFactoryImpl();
 		this.playerManager = new PlayerManagerImpl(playersOfTheGame,trickManageFactory);
 		this.playerManager.loadPlayer();
 		this.cardManager = new CardManagerImpl(CardDeck.getInstance());
@@ -120,8 +116,7 @@ public class UnoGameExecutor implements Game {
 	 * @return
 	 */
 	public Turn getFirstDrawPileCard(Player firstPlayer, Card currentCard) {
-		Turn currentTurn =  this.playerManager.getFirstPlayerIfNotNumberCard(currentCard, firstPlayer, this.cardManager);
-		return currentTurn;
+		return this.playerManager.getFirstPlayerIfNotNumberCard(currentCard, firstPlayer, this.cardManager);
 	}
 
 	/**

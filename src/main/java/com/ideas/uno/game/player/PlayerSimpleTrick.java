@@ -2,6 +2,8 @@ package com.ideas.uno.game.player;
 
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import com.ideas.uno.game.card.Card;
 
 /*
@@ -23,21 +25,21 @@ public class PlayerSimpleTrick implements Trick {
 	@Override
 	public Card myTrick() {
 		List<Card> myMatchingColorCards = getNumberCardsWithSameColor(this.myCards, this.discardPileCard);
-		if (myMatchingColorCards.size() > 0) {
+		if (CollectionUtils.isNotEmpty(myMatchingColorCards)) 
 			return getMaxNumberCard(myMatchingColorCards);
-		} 
+		
 		List<Card> myMatchingNumberCards = getAnyNumberCardsWithSameColor(this.myCards, this.discardPileCard);
-		if(myMatchingNumberCards.size() > 0) {
+		if(CollectionUtils.isNotEmpty(myMatchingNumberCards)) 
 			return myMatchingNumberCards.get(0);
-		} 
+		
 		List<Card> actionCards = getActionCardList(this.myCards, this.discardPileCard);
-		if(actionCards.size() > 0) {
+		if(CollectionUtils.isNotEmpty(actionCards)) 
 			return actionCards.get(0);
-		}
+		
 		List<Card> myWildCards = getAnyWildCard(this.myCards);
-		if (myWildCards.size() > 0) {
+		if (CollectionUtils.isNotEmpty(myWildCards)) 
 			return myWildCards.get(0);
-		}
+		
 		return null;
 	}
 

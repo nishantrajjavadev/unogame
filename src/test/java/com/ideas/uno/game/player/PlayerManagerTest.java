@@ -23,7 +23,6 @@ public class PlayerManagerTest {
 	private static CardDeck cardDeck;
 	CardManager cardManager;
 
-	private PlayerTrickManageFactory trickManagerFactory;
 	
 	@BeforeClass
 	public static void beforeClass(){
@@ -32,7 +31,7 @@ public class PlayerManagerTest {
 	
 	@Before
 	public void setUp() {
-		trickManagerFactory = new PlayerTrickManagerFactoryImpl();
+		PlayerTrickManageFactory trickManagerFactory = new PlayerTrickManagerFactoryImpl();
 		cardManager = new CardManagerImpl(cardDeck);
 		loadPlayers();
 		playerManager = new PlayerManagerImpl(playersOfTheGame, trickManagerFactory);
@@ -57,7 +56,7 @@ public class PlayerManagerTest {
 		playerManager.distrubuteCards(cardManager);
 		playerManager.resetCards();
 		playerManager.getGamePlayers().forEach(
-				player -> Assert.assertTrue(player.getCards().size() == 0));
+				player -> Assert.assertTrue(player.getCards().isEmpty()));
 	}
 
 
@@ -96,7 +95,7 @@ public class PlayerManagerTest {
 	}
 
 	private Map<String, Integer> loadPlayers() {
-		playersOfTheGame = new HashMap<String, Integer>();
+		playersOfTheGame = new HashMap<>();
 		playersOfTheGame.put("PLAYER_1", 7);
 		playersOfTheGame.put("PLAYER_2", 8);
 		playersOfTheGame.put("PLAYER_3", 9);

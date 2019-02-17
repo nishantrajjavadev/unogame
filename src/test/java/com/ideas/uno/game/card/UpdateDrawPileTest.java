@@ -6,11 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.ideas.uno.game.card.Card;
-import com.ideas.uno.game.card.CardColor;
-import com.ideas.uno.game.card.CardType;
-import com.ideas.uno.game.card.UpdateDrawPile;
-
 public class UpdateDrawPileTest {
 
 	

@@ -18,11 +18,10 @@ public class PlayerTest {
 
 	CardManager cardManager;
 	private CardDeck cardDeck;
-	private PlayerTrickManageFactory trickManagerFactory;
 
 	@Before
 	public void setUp() {
-		trickManagerFactory = new PlayerTrickManagerFactoryImpl();
+		PlayerTrickManageFactory trickManagerFactory = new PlayerTrickManagerFactoryImpl();
 		cardManager = Mockito.mock(CardManagerImpl.class);
 		player = new Player("Nishant", 25, trickManagerFactory);
 		cardDeck = CardDeck.getInstance();
@@ -41,7 +40,7 @@ public class PlayerTest {
 		Card card = new Card(CardColor.RED, CardType.DRAW_TWO, 1);
 		player.addCard(card);
 		player.removeCards(card);
-		Assert.assertTrue(player.getCards().size() == 0);
+		Assert.assertTrue(player.getCards().isEmpty());
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
@@ -85,7 +84,7 @@ public class PlayerTest {
 		Mockito.when(cardManager.getCardDeck()).thenReturn(cardDeck);
 		Card returnCard = player.turn(inputCard, cardManager);
 		Assert.assertNull(returnCard);
-		Assert.assertTrue(player.getCards().size() == 0);
+		Assert.assertTrue(player.getCards().isEmpty());
 	}
 	
 	@Test
@@ -176,7 +175,7 @@ public class PlayerTest {
 		Mockito.when(cardManager.getCardDeck()).thenReturn(cardDeck);
 		Card returnCard = player.getNextTrickyCard(cardManager);
 		Assert.assertNull(returnCard);
-		Assert.assertTrue(player.getCards().size() == 0);
+		Assert.assertTrue(player.getCards().isEmpty());
 	}
 
 }

@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import com.ideas.uno.game.card.Card;
 
 public class PlayerWildCardTrick implements Trick {
@@ -21,7 +23,7 @@ public class PlayerWildCardTrick implements Trick {
 				.collect(
 						Collectors.maxBy(Comparator
 								.comparing(Card::getCardColors)))
-				.orElse(myCards.size() > 0 ? myCards.stream().findAny().get()
+				.orElse(CollectionUtils.isNotEmpty(this.myCards) ? myCards.stream().findAny().get()
 						: null);
 	}
 

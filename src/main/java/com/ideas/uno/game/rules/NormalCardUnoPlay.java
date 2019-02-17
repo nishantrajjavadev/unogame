@@ -36,7 +36,7 @@ public class NormalCardUnoPlay implements Rule {
 		if(myChanceCard == null){
 			return new Turn(player, null);
 		}
-		if (myChanceCard != null && isActionCard(myChanceCard)) {
+		if (isActionCard(myChanceCard)) {
 			return new Turn(player, myChanceCard);
 		}
 		DirectionManager directionManager = directionManagerFactory.getDirection(myChanceCard.getCardType());

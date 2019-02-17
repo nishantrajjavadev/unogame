@@ -17,6 +17,7 @@ import com.ideas.uno.game.card.CardType;
 @RunWith(MockitoJUnitRunner.class)
 public class PlayerScoreBoardManagerTest {
 
+	private static final String PLAYER_1 = "PLAYER_1";
 	PlayerScoreBorad playerScoreBoard;
 	Player currentTopPlayer;
 	PlayerScoreBoardManager boardManager;
@@ -74,7 +75,7 @@ public class PlayerScoreBoardManagerTest {
 	}
 
 	private List<Player> populatePlayers() {
-		Player playerOne = new Player("PLAYER_1", 25, trickManagerFactory);
+		Player playerOne = new Player(PLAYER_1, 25, trickManagerFactory);
 		playerOne.addScore(100);
 
 		Player playerTwo = new Player("PLAYER_2", 20, trickManagerFactory);
@@ -88,11 +89,11 @@ public class PlayerScoreBoardManagerTest {
 	}
 
 	private List<Player> populatePlayersWithoutHighestScore() {
-		Player playerOne = new Player("PLAYER_1", 25, trickManagerFactory);
+		Player playerOne = new Player(PLAYER_1, 25, trickManagerFactory);
 		playerOne.addCard(new Card(CardColor.RED, CardType.WILD, 2));
 		playerOne.addScore(100);
 
-		Player playerTwo = new Player("PLAYER_1", 20, trickManagerFactory);
+		Player playerTwo = new Player(PLAYER_1, 20, trickManagerFactory);
 		playerTwo.addCard(new Card(CardColor.GREEN, CardType.NUMBER, 9));
 		playerTwo.addScore(200);
 

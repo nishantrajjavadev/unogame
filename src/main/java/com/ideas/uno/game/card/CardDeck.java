@@ -21,8 +21,8 @@ public class CardDeck {
 	}
 
 	private void init() {
-		drawPile = new Stack<Card>();
-		discardPile = new Stack<Card>();
+		drawPile = new Stack<>();
+		discardPile = new Stack<>();
 		observer = new UpdateDrawPile(drawPile, discardPile);
 		for (int i = 0; i <= 9; i++) {
 			for (int j = 0; j < (i == 0 ? 1 : 2); j++) {
@@ -40,7 +40,7 @@ public class CardDeck {
 			drawPile.push(new Card(CardColor.NONE, CardType.WILD_D4, 50));
 		}
 		Collections.shuffle(drawPile);
-		if (drawPile.size() <= 0 || drawPile.size() > 108) {
+		if (drawPile.isEmpty() || drawPile.size() > 108) {
 			throw new IllegalStateException("Uno game cards are not loaded");
 		}
 	}
@@ -74,7 +74,7 @@ public class CardDeck {
 	}
 
 	public Stack<Card> getDrawPile() {
-		if (drawPile.size() == 0) {
+		if (drawPile.isEmpty()) {
 			observer.updateDrawPile();
 		}
 		return drawPile;

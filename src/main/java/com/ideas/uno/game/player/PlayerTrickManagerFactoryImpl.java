@@ -7,10 +7,10 @@ import com.ideas.uno.game.card.Card;
 public class PlayerTrickManagerFactoryImpl implements PlayerTrickManageFactory {
 
 	@Override
-	public Trick getPlayerTrick(String trickType, List<Card> myCards, Card discardPileCard) {
-		if(SIMPLE_TRICK.equals(trickType)){
+	public Trick getPlayerTrick(PlayerTrickEnum trickType, List<Card> myCards, Card discardPileCard) {
+		if(PlayerTrickEnum.SIMPLE_TRICK.equals(trickType)){
 			return new PlayerSimpleTrick(myCards, discardPileCard);
-		} else if(WILD_CARD_TRICK.equals(trickType)){
+		} else if(PlayerTrickEnum.WILD_CARD_TRICK.equals(trickType)){
 			return new PlayerWildCardTrick(myCards);
 		}
 		 return new PlayerSimpleTrick(myCards, discardPileCard);

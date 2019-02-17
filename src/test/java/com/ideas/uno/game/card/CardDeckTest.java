@@ -18,7 +18,7 @@ public class CardDeckTest {
 	@Test
 	public void shouldReturnDrawPlile() {
 		Stack<Card> expectedDrawPile = cardDeck.getDrawPile();
-		Assert.assertTrue(expectedDrawPile.size() > 0);
+		Assert.assertTrue(!expectedDrawPile.isEmpty());
 	}
 
 	@Test
@@ -26,14 +26,14 @@ public class CardDeckTest {
 		Card firstCard = cardDeck.getFirstCard();
 		cardDeck.addCardToDiscardPile(firstCard);
 		Assert.assertNotNull(firstCard);
-		Assert.assertNotNull(cardDeck.getDiscardPile().size() > 0);
+		Assert.assertNotNull(!cardDeck.getDiscardPile().isEmpty());
 	}
 
 	@Test
 	public void shouldResetCard() {
 		cardDeck.reset();
 		Assert.assertTrue(cardDeck.getDrawPile().size() == 108);
-		Assert.assertTrue(cardDeck.getDiscardPile().size() == 0);
+		Assert.assertTrue(cardDeck.getDiscardPile().isEmpty());
 	}
 
 }

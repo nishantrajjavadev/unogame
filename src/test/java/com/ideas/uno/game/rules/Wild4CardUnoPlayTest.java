@@ -41,7 +41,7 @@ public class Wild4CardUnoPlayTest {
 		Mockito.when(directionManagerFactoryImpl.getDirection(card.getCardType())).thenReturn(nextDirectionPlayer);
 		Mockito.when(nextDirectionPlayer.getNextPlayer(playerManager, player)).thenReturn(player);
 		Mockito.when(player.turn(card, cardManager)).thenReturn(card);
-		Mockito.doNothing().when(player).wild4CardPenalty(cardManager);;
+		Mockito.doNothing().when(player).wild4CardPenalty(cardManager);
 		Turn turn = wild4CardUnoPlay.play(card, player);
 		Assert.assertEquals(turn.getPlayingCard(), card);
 		Mockito.verify(player).getNextTrickyCard(cardManager);

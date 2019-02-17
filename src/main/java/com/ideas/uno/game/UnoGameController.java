@@ -13,7 +13,7 @@ import com.ideas.uno.game.executor.UnoGameExecutor;
  */
 public class UnoGameController {
 
-	private static Map<String, Integer> playersOfTheGame = new HashMap<String, Integer>();
+	private static Map<String, Integer> playersOfTheGame = new HashMap<>();
 
 	private static int maxScorePointToWin = 500;
 

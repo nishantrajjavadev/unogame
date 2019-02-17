@@ -3,6 +3,8 @@ package com.ideas.uno.game.player;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import com.ideas.uno.game.card.Card;
 
 /**
@@ -26,7 +28,7 @@ public class PlayerScoreBoardManager {
 		int totalScore = 0;
 		for (Player player : players) {
 			totalScore = totalScore + player.getCards().stream().mapToInt(Card::getNumber).sum();
-			if (player.getCards().size() == 0) {
+			if (CollectionUtils.isEmpty(player.getCards())) {
 				this.currentTopPlayer = player;
 			}
 		}
@@ -36,10 +38,7 @@ public class PlayerScoreBoardManager {
 	// check if any player wins the game
 	public boolean isGameFinished() {
 		Player player = playerScoreBorad.getPlayers().stream().max(Comparator.comparing(Player::getScore)).get();
-		if (player.getScore() >= this.playerScoreBorad.getWinningPoints()) {
-			return true;
-		}
-		return false;
+		return player.getScore() >= this.playerScoreBorad.getWinningPoints();
 	}
 
 	public Player getCurrentTopPlayer() {

@@ -54,12 +54,12 @@ public class PlayerManagerImpl implements PlayerManager{
 
 	@Override
 	public void resetCards() {
-		this.players.stream().filter(player -> player.reset()).collect(Collectors.toList());
+		this.players.stream().filter(Player::reset).collect(Collectors.toList());
 	}
 
 	@Override
 	public void distrubuteCards(CardManager cardManager) {
-		this.players.forEach((player) -> cardManager.draw(player, 7));
+		this.players.forEach(player -> cardManager.draw(player, 7));
 	}
 	// Initialize players of the game
 	@Override

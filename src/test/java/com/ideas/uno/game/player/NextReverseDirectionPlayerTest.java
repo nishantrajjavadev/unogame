@@ -28,11 +28,9 @@ public class NextReverseDirectionPlayerTest {
 		PlayerManager playerManager = Mockito.mock(PlayerManager.class);
 		int position = 2;
 		List<Player> players = populatePlayers();
-		System.out.println(players.toString());
 		Mockito.when(playerManager.getGamePlayers()).thenReturn(players);
 		Player nextPlayer = nextReverseDirectionPlayer.getNextPlayer(playerManager, players.get(position));
 		Collections.reverse(players);
-		System.out.println(nextPlayer);
 		Assert.assertTrue(nextPlayer.equals(players.get(position - 1)));
 		Assert.assertEquals(nextPlayer.getName(), players.get(position - 1)
 				.getName());
