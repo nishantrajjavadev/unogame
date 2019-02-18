@@ -23,7 +23,7 @@ public class CardManagerImpl implements CardManager{
 	@Override
 	public void draw(Player player, int noOfCards) {
 		for (int i = 0; i < noOfCards; i++) {
-			if (cardDeck.getDrawPile().isEmpty()) {
+			if (!cardDeck.getDrawPile().isEmpty()) {
 				player.addCard(cardDeck.getDrawPile().pop());
 			}
 		}

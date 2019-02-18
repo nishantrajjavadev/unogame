@@ -1,7 +1,5 @@
 package com.ideas.uno.game.player.direction;
 
-import java.util.List;
-
 import com.ideas.uno.game.player.Player;
 import com.ideas.uno.game.player.PlayerManager;
 
@@ -9,8 +7,7 @@ public class NextDirectionPlayer implements DirectionManager {
 
 	@Override
 	public Player getNextPlayer(final PlayerManager playerManager, final Player player) {
-		List<Player> players = playerManager.getGamePlayers();
-		return getPlayerNextPosition(player, players);
+		return getPlayerNextPosition(player, playerManager.getGamePlayers());
 	}
 
 }
