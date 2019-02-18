@@ -32,15 +32,15 @@ public class NormalCardUnoPlay implements Rule {
 
 	@Override
 	public Turn play(final Card discardPileCard, final Player player) {
-		Card myChanceCard = player.turn(discardPileCard, this.cardManager);
+		DirectionManager directionManager = directionManagerFactory.getDirection(discardPileCard.getCardType());
+		Player nextPlayer = directionManager.getNextPlayer(this.playerManager, player);
+		Card myChanceCard = nextPlayer.turn(discardPileCard, this.cardManager);
 		if(myChanceCard == null){
-			return new Turn(player, null);
+			return new Turn(nextPlayer, null);
 		}
 		if (isActionCard(myChanceCard)) {
-			return new Turn(player, myChanceCard);
+			return new Turn(nextPlayer, myChanceCard);
 		}
-		DirectionManager directionManager = directionManagerFactory.getDirection(myChanceCard.getCardType());
-		Player nextPlayer = directionManager.getNextPlayer(this.playerManager, player);
 		return new Turn(nextPlayer, myChanceCard);
 	}
 
@@ -49,7 +49,6 @@ public class NormalCardUnoPlay implements Rule {
 	 * @return
 	 */
 	public boolean isActionCard(Card myChanceCard) {
-		return CardType.WILD.equals(myChanceCard.getCardType()) || CardType.WILD_D4.equals(myChanceCard.getCardType()) || CardType.DRAW_TWO.equals(myChanceCard.getCardType())
-				|| CardType.REVERSE.equals(myChanceCard.getCardType()) || CardType.SKIP.equals(myChanceCard.getCardType());
+		return CardType.WILD.equals(myChanceCard.getCardType()) || CardType.WILD_D4.equals(myChanceCard.getCardType());
 	}
 }

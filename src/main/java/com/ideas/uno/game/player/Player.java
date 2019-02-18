@@ -88,6 +88,7 @@ public class Player {
 	 * @param cardDeck
 	 */
 	public void draw2CardPenalty(final CardManager cardManager) {
+		System.out.println(this.name + ": -------------penalty Draw 2 Pick----------- ");
 		for (int i = 0; i < 2; i++) {
 			addCard(cardManager.getCardDeck().getDrawPile().pop());
 		}
@@ -97,6 +98,7 @@ public class Player {
 	 * @param cardDeck
 	 */
 	public void wild4CardPenalty(final CardManager cardManager) {
+		System.out.println(this.name + ": -------------penalty Wild 4 Pick----------- ");
 		for (int i = 0; i < 4; i++) {
 			addCard(cardManager.getCardDeck().getDrawPile().pop());
 		}
